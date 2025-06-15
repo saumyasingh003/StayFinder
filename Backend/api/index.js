@@ -22,11 +22,80 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 const mongoURI = process.env.MONGO_URI;
 
+// Database connection status
+let isDbConnected = false;
+let dbError = null;
+
+// Basic routes that don't require database
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "CozyCrib API is running!",
+    database: isDbConnected ? "Connected" : "Connecting...",
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Health check endpoint
+app.get("/health", async (req, res) => {
+  try {
+    const dbState = mongoose.connection.readyState;
+    const states = {
+      0: 'disconnected',
+      1: 'connected',
+      2: 'connecting',
+      3: 'disconnecting'
+    };
+
+    res.json({
+      success: true,
+      database: {
+        status: states[dbState],
+        connected: isDbConnected,
+        host: mongoose.connection.host || 'Not connected',
+        name: mongoose.connection.name || 'Not connected',
+        error: dbError
+      },
+      environment: {
+        nodeEnv: process.env.NODE_ENV,
+        mongoUri: process.env.MONGO_URI ? 'Set' : 'Not Set',
+        jwtSecret: process.env.JWT_SECRET ? 'Set' : 'Not Set'
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Health check failed",
+      error: error.message
+    });
+  }
+});
+
+// Middleware to check database connection for protected routes
+const requireDatabase = (req, res, next) => {
+  if (!isDbConnected) {
+    return res.status(503).json({
+      success: false,
+      message: "Service temporarily unavailable - database not connected",
+      error: dbError || "Database connection in progress"
+    });
+  }
+  next();
+};
+
+// Register routes with database requirement
+app.use("/users", requireDatabase, userRoutes);
+app.use("/listings", requireDatabase, listingRoutes);
+app.use("/bookings", requireDatabase, bookingRoutes);
+app.use("/upload", requireDatabase, uploadRoutes);
+
 // Improved MongoDB connection for serverless
 const connectDB = async () => {
   try {
-    if (mongoose.connections[0].readyState) {
+    if (mongoose.connections[0].readyState === 1) {
       console.log("Already connected to MongoDB");
+      isDbConnected = true;
       return;
     }
 
@@ -40,8 +109,12 @@ const connectDB = async () => {
     });
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);
+    isDbConnected = true;
+    dbError = null;
   } catch (error) {
     console.error("Database connection error:", error);
+    isDbConnected = false;
+    dbError = error.message;
     throw error;
   }
 };
@@ -50,67 +123,11 @@ const connectDB = async () => {
 connectDB()
   .then(() => {
     console.log("Database connected successfully!");
-    
-    // Register routes after successful connection
-    app.use("/users", userRoutes);
-    app.use("/listings", listingRoutes);
-    app.use("/bookings", bookingRoutes);
-    app.use("/upload", uploadRoutes);
-
-    app.get("/", (req, res) => {
-      res.json({
-        success: true,
-        message: "CozyCrib API is running!",
-        database: "Connected",
-        timestamp: new Date().toISOString()
-      });
-    });
-
-    // Health check endpoint
-    app.get("/health", async (req, res) => {
-      try {
-        const dbState = mongoose.connection.readyState;
-        const states = {
-          0: 'disconnected',
-          1: 'connected',
-          2: 'connecting',
-          3: 'disconnecting'
-        };
-
-        res.json({
-          success: true,
-          database: {
-            status: states[dbState],
-            host: mongoose.connection.host,
-            name: mongoose.connection.name
-          },
-          environment: {
-            nodeEnv: process.env.NODE_ENV,
-            mongoUri: process.env.MONGO_URI ? 'Set' : 'Not Set',
-            jwtSecret: process.env.JWT_SECRET ? 'Set' : 'Not Set'
-          },
-          timestamp: new Date().toISOString()
-        });
-      } catch (error) {
-        res.status(500).json({
-          success: false,
-          message: "Health check failed",
-          error: error.message
-        });
-      }
-    });
   })
   .catch((error) => {
     console.error("Failed to connect to database:", error);
-    
-    // Fallback error handler for all routes when DB is down
-    app.use("*", (req, res) => {
-      res.status(503).json({
-        success: false,
-        message: "Service temporarily unavailable - database connection failed",
-        error: "Please try again in a few moments"
-      });
-    });
+    isDbConnected = false;
+    dbError = error.message;
   });
 
 // Global error handler
@@ -128,7 +145,19 @@ app.use("*", (req, res) => {
   res.status(404).json({
     success: false,
     message: "Route not found",
-    path: req.originalUrl
+    path: req.originalUrl,
+    availableRoutes: [
+      "GET /",
+      "GET /health",
+      "POST /users/signup",
+      "POST /users/login",
+      "GET /listings/all",
+      "GET /listings/view/:id",
+      "POST /listings/add",
+      "POST /bookings",
+      "GET /bookings/user",
+      "POST /upload/image"
+    ]
   });
 });
 
