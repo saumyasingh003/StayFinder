@@ -123,35 +123,26 @@ app.use("/listings", requireDatabase, listingRoutes);
 app.use("/bookings", requireDatabase, bookingRoutes);
 app.use("/upload", requireDatabase, uploadRoutes);
 
-// Improved MongoDB connection for serverless
 const connectDB = async () => {
   try {
-    if (mongoose.connections[0].readyState === 1) {
-      console.log("Already connected to MongoDB");
-      isDbConnected = true;
-      return;
-    }
-
-    // Simplified connection options for Vercel serverless
-    const conn = await mongoose.connect(mongoURI, {
-      serverSelectionTimeoutMS: 10000, // 10 seconds (shorter for serverless)
-      socketTimeoutMS: 20000, // 20 seconds
-      connectTimeoutMS: 10000, // 10 seconds
-      bufferCommands: false, // Disable mongoose buffering
+    await mongoose.connect(mongoURI, {
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 20000,
+      connectTimeoutMS: 10000,
+      bufferCommands: false,
     });
-
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.log("MongoDB connected");
     isDbConnected = true;
     dbError = null;
   } catch (error) {
-    console.error("Database connection error:", error);
+    console.error("MongoDB connection failed:", error.message);
     isDbConnected = false;
     dbError = error.message;
-    throw error;
   }
 };
 
-// Initialize database connection
+
+
 connectDB()
   .then(() => {
     console.log("Database connected successfully!");
@@ -162,35 +153,12 @@ connectDB()
     dbError = error.message;
   });
 
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error("Global error handler:", err);
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || "Internal Server Error",
-    error: process.env.NODE_ENV === 'development' ? err.stack : undefined
-  });
-});
 
-// Handle 404 for undefined routes
-app.use("*", (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: "Route not found",
-    path: req.originalUrl,
-    availableRoutes: [
-      "GET /",
-      "GET /health",
-      "POST /users/signup",
-      "POST /users/login",
-      "GET /listings/all",
-      "GET /listings/view/:id",
-      "POST /listings/add",
-      "POST /bookings",
-      "GET /bookings/user",
-      "POST /upload/image"
-    ]
+  const PORT = process.env.PORT || 8080;
+
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
   });
-});
+
 
 export default app; 
