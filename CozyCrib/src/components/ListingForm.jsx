@@ -48,8 +48,8 @@ const ListingForm = () => {
   const fetchListing = async () => {
     try {
       const res = await get(`/listings/view/${id}`);
-      if (res.data.success) {
-        const listing = res.data.data;
+      if (res.success) {
+        const listing = res.data;
         setFormData({
           title: listing.title || '',
           location: listing.location || '',
@@ -80,7 +80,6 @@ const ListingForm = () => {
     if (!files || files.length === 0) return;
 
     setUploading(true);
-    const token = localStorage.getItem('token');
     
     try {
       const uploadPromises = Array.from(files).map(async (file) => {
@@ -90,11 +89,11 @@ const ListingForm = () => {
         const response = await post('/upload/image', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`,
           },
         });
         
-        return response.data.imageUrl;
+        console.log('Upload response:', response);
+        return response.imageUrl;
       });
 
       const imageUrls = await Promise.all(uploadPromises);
@@ -144,21 +143,17 @@ const ListingForm = () => {
 
     try {
       if (isEdit) {
-        await put(`/listings/update/${id}`, submitData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await put(`/listings/update/${id}`, submitData);
         toast.success('Listing updated successfully!');
       } else {
-        await post('/listings/add', submitData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await post('/listings/add', submitData);
         toast.success('Listing created successfully!');
       }
       navigate('/host-dashboard');
     } catch (err) {
       console.error('Error saving listing:', err);
-      if (err.response?.data?.message) {
-        toast.error(err.response.data.message);
+      if (err.response?.message) {
+        toast.error(err.response.message);
       } else {
         toast.error('Failed to save listing. Please try again.');
       }

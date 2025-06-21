@@ -1,8 +1,4 @@
 import axios from "axios"
-import Cookies from "js-cookie";
-
-const token = Cookies.get('token');
-
 
 // const API_URL = "https://stay-finder-backend.vercel.app"
 const API_URL = "https://stayfinder-76tr.onrender.com"
@@ -11,7 +7,19 @@ const axiosApi = axios.create({
   baseURL: API_URL,
 })
 
-axiosApi.defaults.headers.common["Authorization"] = "Bearer "+ token
+// Add a request interceptor to include the token dynamically
+axiosApi.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 axiosApi.interceptors.response.use(
   response => response,
@@ -19,7 +27,6 @@ axiosApi.interceptors.response.use(
 )
 
 export async function get(url,params, config = {}) {
-
   if (params) {
     var queryString = params
         ? Object.keys(params)
@@ -27,9 +34,9 @@ export async function get(url,params, config = {}) {
               .join('&')
         : '';
     return  axiosApi.get(`${url}?${queryString}`, {...config}).then(response => response.data);
-} else {
+  } else {
    return  axiosApi.get(`${url}`,{...config}).then(response => response.data);
-}
+  }
 }
 
 export async function post(url, data, config = {}) {

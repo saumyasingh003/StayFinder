@@ -23,8 +23,8 @@ const Home = () => {
   const fetchListings = async () => {
     try {
       const response = await get('/listings/all');
-      if (response.data.success) {
-        setListings(response.data.data);
+      if (response.success) {
+        setListings(response.data);
       } else {
         toast.error('Failed to fetch listings');
       }

@@ -251,8 +251,8 @@ const ListingDetail = () => {
   const fetchListingDetail = async () => {
     try {
       const response = await get(`/listings/view/${id}`);
-      if (response.data.success) {
-        setListing(response.data.data);
+      if (response.success) {
+        setListing(response.data);
       } else {
         toast.error('Listing not found');
         navigate('/home');
@@ -285,7 +285,6 @@ const ListingDetail = () => {
   };
 
   const handlePaymentComplete = async () => {
-    const token = localStorage.getItem('token');
     
     try {
       const response = await post(
@@ -294,13 +293,10 @@ const ListingDetail = () => {
           listingId: id,
           from: bookingData.from,
           to: bookingData.to
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` }
         }
       );
 
-      if (response.data.success) {
+      if (response.success) {
         toast.success('Booking and payment completed successfully!');
         setBookingData({ from: '', to: '' });
         setShowPaymentModal(false);

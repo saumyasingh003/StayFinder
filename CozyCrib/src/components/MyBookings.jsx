@@ -18,11 +18,9 @@ const MyBookings = () => {
         toast.error('Please login to view your bookings');
         return;
       }
-      const response = await get('/bookings/user', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (response.data.success) {
-        setBookings(response.data.data);
+      const response = await get('/bookings/user');
+      if (response.success) {
+        setBookings(response.data);
       } else {
         toast.error('Failed to fetch bookings');
       }

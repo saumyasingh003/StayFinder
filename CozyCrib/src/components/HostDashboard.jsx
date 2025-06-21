@@ -19,13 +19,11 @@ const HostDashboard = () => {
   const fetchHostListings = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await get('/listings/all', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (response.data.success) {
+      const response = await get('/listings/all');
+      if (response.success) {
         // Only show listings where user is host
         const userId = JSON.parse(atob(token.split('.')[1])).userId;
-        setListings(response.data.data.filter(l => l.host && l.host._id === userId));
+        setListings(response.data.filter(l => l.host && l.host._id === userId));
       } else {
         toast.error('Failed to fetch listings');
       }
@@ -39,11 +37,9 @@ const HostDashboard = () => {
   const fetchHostBookings = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await get('/bookings/host', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (response.data.success) {
-        setBookings(response.data.data);
+      const response = await get('/bookings/host');
+      if (response.success) {
+        setBookings(response.data);
         setShowBookings(true);
       } else {
         toast.error('Failed to fetch bookings');
@@ -56,10 +52,7 @@ const HostDashboard = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this listing?')) return;
     try {
-      const token = localStorage.getItem('token');
-      await del(`/listings/delete/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await del(`/listings/delete/${id}`);
       toast.success('Listing deleted');
       fetchHostListings();
     } catch (error) {
@@ -72,8 +65,7 @@ const HostDashboard = () => {
       const token = localStorage.getItem('token');
       await put(
         `/bookings/${bookingId}/status`,
-        { status },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { status }
       );
       toast.success(`Booking ${status} successfully!`);
       fetchHostBookings(); // Refresh bookings
