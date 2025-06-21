@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaPlus, FaEdit, FaTrash, FaListUl, FaBook, FaCheck, FaTimes, FaUser, FaCalendarAlt } from 'react-icons/fa';
-import { get } from '../helpers/api_helper';
+import { del, get } from '../helpers/api_helper';
 
 const HostDashboard = () => {
   const [listings, setListings] = useState([]);
