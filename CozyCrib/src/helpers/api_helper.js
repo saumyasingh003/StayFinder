@@ -4,7 +4,8 @@ import Cookies from "js-cookie";
 const token = Cookies.get('token');
 
 
-const API_URL = "https://stay-finder-backend.vercel.app"
+// const API_URL = "https://stay-finder-backend.vercel.app"
+const API_URL = "https://stayfinder-76tr.onrender.com"
 // const API_URL = "http://localhost:8000"
 const axiosApi = axios.create({
   baseURL: API_URL,
