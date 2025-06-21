@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { FaMapMarkerAlt, FaCalendarAlt, FaHome } from 'react-icons/fa';
+import { get } from '../helpers/api_helper';
 
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -18,7 +18,7 @@ const MyBookings = () => {
         toast.error('Please login to view your bookings');
         return;
       }
-      const response = await axios.get('http://localhost:8000/bookings/user', {
+      const response = await get('/bookings/user', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.data.success) {

@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { FaMapMarkerAlt, FaStar, FaWifi, FaParking, FaSwimmingPool, FaDumbbell, FaChevronLeft, FaChevronRight, FaCreditCard, FaLock, FaTimes } from 'react-icons/fa';
+import { get } from '../helpers/api_helper';
+import { post } from '../helpers/api_helper';
 
 const PaymentModal = ({ isOpen, onClose, bookingData, listing, totalPrice, onPaymentComplete }) => {
   const [paymentLoading, setPaymentLoading] = useState(false);
@@ -248,7 +250,7 @@ const ListingDetail = () => {
 
   const fetchListingDetail = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/listings/view/${id}`);
+      const response = await get(`/listings/view/${id}`);
       if (response.data.success) {
         setListing(response.data.data);
       } else {
@@ -286,8 +288,8 @@ const ListingDetail = () => {
     const token = localStorage.getItem('token');
     
     try {
-      const response = await axios.post(
-        'http://localhost:8000/bookings',
+      const response = await post(
+        '/bookings',
         {
           listingId: id,
           from: bookingData.from,

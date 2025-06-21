@@ -72,6 +72,39 @@ app.get("/health", async (req, res) => {
   }
 });
 
+// Debug endpoint for connection troubleshooting
+app.get("/debug", async (req, res) => {
+  try {
+    const mongoUri = process.env.MONGO_URI;
+    
+    res.json({
+      success: true,
+      debug: {
+        mongoUriExists: !!mongoUri,
+        mongoUriFormat: mongoUri ? (
+          mongoUri.startsWith('mongodb+srv://') ? 'SRV Format' :
+          mongoUri.startsWith('mongodb://') ? 'Standard Format' : 'Unknown Format'
+        ) : 'Not Set',
+        mongoUriLength: mongoUri ? mongoUri.length : 0,
+        hasCredentials: mongoUri ? mongoUri.includes('@') : false,
+        hasDatabase: mongoUri ? mongoUri.includes('/') && mongoUri.split('/').length > 3 : false,
+        connectionState: mongoose.connection.readyState,
+        isDbConnected: isDbConnected,
+        dbError: dbError,
+        nodeVersion: process.version,
+        platform: process.platform
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Debug check failed",
+      error: error.message
+    });
+  }
+});
+
 // Middleware to check database connection for protected routes
 const requireDatabase = (req, res, next) => {
   if (!isDbConnected) {
@@ -99,12 +132,12 @@ const connectDB = async () => {
       return;
     }
 
+    // Simplified connection options for Vercel serverless
     const conn = await mongoose.connect(mongoURI, {
-      serverSelectionTimeoutMS: 30000, // 30 seconds
-      socketTimeoutMS: 45000, // 45 seconds
-      bufferCommands: false,
-      maxPoolSize: 10,
-      minPoolSize: 5,
+      serverSelectionTimeoutMS: 10000, // 10 seconds (shorter for serverless)
+      socketTimeoutMS: 20000, // 20 seconds
+      connectTimeoutMS: 10000, // 10 seconds
+      bufferCommands: false, // Disable mongoose buffering
     });
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);

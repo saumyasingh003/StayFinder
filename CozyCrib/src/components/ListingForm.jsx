@@ -4,6 +4,7 @@ import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { get, post, put } from '../helpers/api_helper';
 
 const ListingSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
@@ -46,7 +47,7 @@ const ListingForm = () => {
 
   const fetchListing = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/listings/view/${id}`);
+      const res = await get(`/listings/view/${id}`);
       if (res.data.success) {
         const listing = res.data.data;
         setFormData({
@@ -86,7 +87,7 @@ const ListingForm = () => {
         const formData = new FormData();
         formData.append('image', file);
         
-        const response = await axios.post('http://localhost:8000/upload/image', formData, {
+        const response = await post('/upload/image', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`,
@@ -143,12 +144,12 @@ const ListingForm = () => {
 
     try {
       if (isEdit) {
-        await axios.put(`http://localhost:8000/listings/update/${id}`, submitData, {
+        await put(`/listings/update/${id}`, submitData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success('Listing updated successfully!');
       } else {
-        await axios.post('http://localhost:8000/listings/add', submitData, {
+        await post('/listings/add', submitData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success('Listing created successfully!');

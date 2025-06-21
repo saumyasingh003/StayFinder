@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaPlus, FaEdit, FaTrash, FaListUl, FaBook, FaCheck, FaTimes, FaUser, FaCalendarAlt } from 'react-icons/fa';
+import { get } from '../helpers/api_helper';
 
 const HostDashboard = () => {
   const [listings, setListings] = useState([]);
@@ -18,7 +19,7 @@ const HostDashboard = () => {
   const fetchHostListings = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8000/listings/all', {
+      const response = await get('/listings/all', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.data.success) {
@@ -38,7 +39,7 @@ const HostDashboard = () => {
   const fetchHostBookings = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8000/bookings/host', {
+      const response = await get('/bookings/host', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.data.success) {
@@ -56,7 +57,7 @@ const HostDashboard = () => {
     if (!window.confirm('Are you sure you want to delete this listing?')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:8000/listings/delete/${id}`, {
+      await del(`/listings/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success('Listing deleted');
@@ -69,8 +70,8 @@ const HostDashboard = () => {
   const handleBookingStatus = async (bookingId, status) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(
-        `http://localhost:8000/bookings/${bookingId}/status`,
+      await put(
+        `/bookings/${bookingId}/status`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );

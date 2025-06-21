@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import banner from '../assets/banner.webp';
 import { FaSearch, FaMapMarkerAlt, FaStar, FaHeart } from 'react-icons/fa';
+import { get } from '../helpers/api_helper';
 
 const Home = () => {
   const [listings, setListings] = useState([]);
@@ -22,7 +22,7 @@ const Home = () => {
 
   const fetchListings = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/listings/all');
+      const response = await get('/listings/all');
       if (response.data.success) {
         setListings(response.data.data);
       } else {
