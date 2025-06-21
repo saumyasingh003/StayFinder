@@ -69,13 +69,12 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-
-          <Link to='/' className="text-2xl font-bold tracking-wide font-serif italic hover:text-gray-200 transition-colors">
+          <Link to='/' className="text-xl sm:text-2xl font-bold tracking-wide font-serif italic hover:text-gray-200 transition-colors">
             StayFinder
           </Link>
 
-          <div className="hidden md:flex items-center space-x-8">
-            <div className="flex space-x-6">
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+            <div className="flex space-x-4 lg:space-x-6">
               {getNavLinks().map((link) => {
                 const Icon = link.icon;
                 return (
@@ -84,7 +83,7 @@ const Navbar = () => {
                     to={link.to}
                     className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                       location.pathname === link.to
-                        ? 'bg-white bg-opacity-20 text-rose-800'
+                        ? 'bg-white bg-opacity-20 text-white'
                         : 'hover:bg-white hover:bg-opacity-10 hover:text-gray-200'
                     }`}
                   >
@@ -95,23 +94,23 @@ const Navbar = () => {
               })}
             </div>
 
-             {!token ? (
-               <div className="flex space-x-3">
-                 <Link
-                   to="/login"
-                   className="flex items-center space-x-2 px-5 py-2.5 border-2 border-white bg-transparent text-white font-semibold rounded-lg hover:bg-white hover:text-rose-600 transform hover:scale-105 transition-all duration-200 shadow-sm"
-                 >
-                   <FaSignInAlt className="w-4 h-4" />
-                   <span>Login</span>
-                 </Link>
-                 <Link
-                   to="/signup"
-                   className="flex items-center space-x-2 px-5 py-2.5 bg-white text-rose-600 font-semibold rounded-lg hover:bg-rose-50 hover:text-rose-700 transform hover:scale-105 transition-all duration-200 shadow-sm"
-                 >
-                   <FaUserPlus className="w-4 h-4" />
-                   <span>Sign Up</span>
-                 </Link>
-               </div>
+            {!token ? (
+              <div className="flex space-x-3">
+                <Link
+                  to="/login"
+                  className="flex items-center space-x-2 px-4 py-2 border-2 border-white bg-transparent text-white font-semibold rounded-lg hover:bg-white hover:text-rose-600 transform hover:scale-105 transition-all duration-200 shadow-sm"
+                >
+                  <FaSignInAlt className="w-4 h-4" />
+                  <span className="hidden lg:inline">Login</span>
+                </Link>
+                <Link
+                  to="/signup"
+                  className="flex items-center space-x-2 px-4 py-2 bg-white text-rose-600 font-semibold rounded-lg hover:bg-rose-50 hover:text-rose-700 transform hover:scale-105 transition-all duration-200 shadow-sm"
+                >
+                  <FaUserPlus className="w-4 h-4" />
+                  <span className="hidden lg:inline">Sign Up</span>
+                </Link>
+              </div>
             ) : (
               <div className="relative dropdown-container">
                 <button
@@ -164,9 +163,8 @@ const Navbar = () => {
         </div>
 
         {isMobileMenuOpen && (
-          <div className="md:hidden  bg-opacity-10 rounded-lg mt-2 mb-4 py-4">
+          <div className="md:hidden bg-white/10 backdrop-blur-sm rounded-lg mt-2 mb-4 py-4 border border-white/20">
             <div className="flex flex-col space-y-2">
-
               {getNavLinks().map((link) => {
                 const Icon = link.icon;
                 return (
@@ -175,7 +173,7 @@ const Navbar = () => {
                     to={link.to}
                     className={`flex items-center space-x-3 px-4 py-3 mx-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                       location.pathname === link.to
-                        ? ' bg-opacity-20 text-white'
+                        ? 'bg-white/20 text-white'
                         : 'hover:bg-white hover:bg-opacity-10'
                     }`}
                   >
@@ -185,34 +183,47 @@ const Navbar = () => {
                 );
               })}
 
-              <div className="border-t border-white border-opacity-20 mt-4 pt-4">
-                                 {!token ? (
-                   <div className="flex flex-col space-y-3 px-2">
-                     <Link
-                       to="/login"
-                       className="flex items-center justify-center space-x-2 px-6 py-3 border-2 border-white bg-transparent text-white font-semibold rounded-lg hover:bg-white hover:text-rose-600 transform hover:scale-105 transition-all duration-200 shadow-sm"
-                     >
-                       <FaSignInAlt className="w-4 h-4" />
-                       <span>Login</span>
-                     </Link>
-                     <Link
-                       to="/signup"
-                       className="flex items-center justify-center space-x-2 px-6 py-3  text-rose-600 font-semibold rounded-lg hover:text-rose-700 transform hover:scale-105 transition-all duration-200 shadow-sm"
-                     >
-                       <FaUserPlus className="w-4 h-4" />
-                       <span>Sign Up</span>
-                     </Link>
-                   </div>
+              <div className="border-t border-white/20 mt-4 pt-4">
+                {!token ? (
+                  <div className="flex flex-col space-y-3 px-2">
+                    <Link
+                      to="/login"
+                      className="flex items-center justify-center space-x-2 px-6 py-3 border-2 border-white bg-transparent text-white font-semibold rounded-lg hover:bg-white hover:text-rose-600 transition-all duration-200"
+                    >
+                      <FaSignInAlt className="w-4 h-4" />
+                      <span>Login</span>
+                    </Link>
+                    <Link
+                      to="/signup"
+                      className="flex items-center justify-center space-x-2 px-6 py-3 bg-white text-rose-600 font-semibold rounded-lg hover:bg-rose-50 hover:text-rose-700 transition-all duration-200"
+                    >
+                      <FaUserPlus className="w-4 h-4" />
+                      <span>Sign Up</span>
+                    </Link>
+                  </div>
                 ) : (
                   <div className="px-2">
-                    <div className="px-4 py-2 mb-2">
-                      <p className="text-sm font-medium">{fullName || 'User'}</p>
-                      <p className="text-xs text-gray-200 capitalize">{role} Account</p>
+                    <div className="bg-white/10 rounded-lg p-4 mb-3">
+                      <div className="flex items-center space-x-3">
+                        <div className="bg-white/20 p-2 rounded-full">
+                          <FaUser className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-white">{fullName || 'User'}</p>
+                          <p className="text-xs text-white/80 capitalize flex items-center">
+                            <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                            {role} Account
+                          </p>
+                        </div>
+                      </div>
                     </div>
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center cursor-pointer justify-center space-x-2 px-4 py-3  bg-opacity-10 rounded-md hover:bg-opacity-20 font-medium transition-colors duration-200"
+                      className="w-full flex items-center justify-center space-x-2 px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-all duration-200"
                     >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
                       <span>Logout</span>
                     </button>
                   </div>

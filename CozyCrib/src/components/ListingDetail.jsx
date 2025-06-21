@@ -361,31 +361,33 @@ const ListingDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 pb-8">
+    <div className="min-h-screen bg-gray-50 pt-20 sm:pt-24 pb-8">
       <div className="container mx-auto px-4">
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <button 
             onClick={() => navigate('/home')}
-            className="flex items-center text-gray-600 hover:text-gray-800 mb-4"
+            className="flex items-center text-gray-600 hover:text-gray-800 mb-3 sm:mb-4 p-2 -ml-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <FaChevronLeft className="mr-2" />
-            Back to listings
+            <span className="text-sm sm:text-base">Back to listings</span>
           </button>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">{listing.title}</h1>
-          <div className="flex items-center text-gray-600">
-            <FaMapMarkerAlt className="mr-2" />
-            <span>{listing.location}</span>
-            <div className="flex items-center ml-4">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-2 line-clamp-2">{listing.title}</h1>
+          <div className="flex flex-col sm:flex-row sm:items-center text-gray-600 space-y-2 sm:space-y-0">
+            <div className="flex items-center">
+              <FaMapMarkerAlt className="mr-2 flex-shrink-0" />
+              <span className="text-sm sm:text-base line-clamp-1">{listing.location}</span>
+            </div>
+            <div className="flex items-center sm:ml-4">
               <FaStar className="text-yellow-400 mr-1" />
-              <span>4.8 (123 reviews)</span>
+              <span className="text-sm sm:text-base">4.8 (123 reviews)</span>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           <div className="lg:col-span-2">
-            <div className="relative mb-8">
-              <div className="relative h-96 rounded-xl overflow-hidden">
+            <div className="relative mb-6 sm:mb-8">
+              <div className="relative h-64 sm:h-80 lg:h-96 rounded-xl overflow-hidden">
                 <img
                   src={listing.images[currentImageIndex] || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
                   alt={listing.title}
@@ -395,29 +397,29 @@ const ListingDetail = () => {
                   <>
                     <button
                       onClick={prevImage}
-                      className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 p-2 rounded-full hover:bg-opacity-100 transition-all"
+                      className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 p-2 rounded-full hover:bg-opacity-100 transition-all shadow-lg"
                     >
-                      <FaChevronLeft />
+                      <FaChevronLeft className="w-3 h-3 sm:w-4 sm:h-4" />
                     </button>
                     <button
                       onClick={nextImage}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 p-2 rounded-full hover:bg-opacity-100 transition-all"
+                      className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 p-2 rounded-full hover:bg-opacity-100 transition-all shadow-lg"
                     >
-                      <FaChevronRight />
+                      <FaChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
                     </button>
                   </>
                 )}
               </div>
               
               {listing.images.length > 1 && (
-                <div className="flex space-x-2 mt-4 overflow-x-auto">
+                <div className="flex space-x-2 mt-3 sm:mt-4 overflow-x-auto pb-2">
                   {listing.images.map((image, index) => (
                     <img
                       key={index}
                       src={image}
                       alt={`${listing.title} ${index + 1}`}
-                      className={`w-20 h-20 object-cover rounded-lg cursor-pointer flex-shrink-0 ${
-                        index === currentImageIndex ? 'ring-2 ring-rose-500' : ''
+                      className={`w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg cursor-pointer flex-shrink-0 transition-all ${
+                        index === currentImageIndex ? 'ring-2 ring-rose-500 ring-offset-2' : 'hover:opacity-80'
                       }`}
                       onClick={() => setCurrentImageIndex(index)}
                     />
@@ -426,51 +428,51 @@ const ListingDetail = () => {
               )}
             </div>
 
-            <div className="bg-white rounded-xl p-6 mb-8">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">About this place</h2>
-              <p className="text-gray-600 leading-relaxed">{listing.description}</p>
+            <div className="bg-white rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 shadow-sm">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-3 sm:mb-4">About this place</h2>
+              <p className="text-gray-600 leading-relaxed text-sm sm:text-base">{listing.description}</p>
             </div>
 
-            <div className="bg-white rounded-xl p-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Amenities</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="flex items-center">
-                  <FaWifi className="text-rose-500 mr-3" />
-                  <span>Free WiFi</span>
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-3 sm:mb-4">Amenities</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+                <div className="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                  <FaWifi className="text-rose-500 mr-3 flex-shrink-0" />
+                  <span className="text-sm sm:text-base">Free WiFi</span>
                 </div>
-                <div className="flex items-center">
-                  <FaParking className="text-rose-500 mr-3" />
-                  <span>Free Parking</span>
+                <div className="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                  <FaParking className="text-rose-500 mr-3 flex-shrink-0" />
+                  <span className="text-sm sm:text-base">Free Parking</span>
                 </div>
-                <div className="flex items-center">
-                  <FaSwimmingPool className="text-rose-500 mr-3" />
-                  <span>Swimming Pool</span>
+                <div className="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                  <FaSwimmingPool className="text-rose-500 mr-3 flex-shrink-0" />
+                  <span className="text-sm sm:text-base">Swimming Pool</span>
                 </div>
-                <div className="flex items-center">
-                  <FaDumbbell className="text-rose-500 mr-3" />
-                  <span>Gym</span>
+                <div className="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                  <FaDumbbell className="text-rose-500 mr-3 flex-shrink-0" />
+                  <span className="text-sm sm:text-base">Gym</span>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl p-6 shadow-lg lg:sticky lg:top-24">
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg lg:sticky lg:top-24">
+              <div className="mb-4 sm:mb-6">
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
                   <div>
-                    <span className="text-2xl font-bold text-gray-800">₹{listing.pricePerNight}</span>
-                    <span className="text-gray-500 ml-1">/ night</span>
+                    <span className="text-xl sm:text-2xl font-bold text-gray-800">₹{listing.pricePerNight}</span>
+                    <span className="text-gray-500 ml-1 text-sm sm:text-base">/ night</span>
                   </div>
                   <div className="flex items-center">
                     <FaStar className="text-yellow-400 mr-1" />
-                    <span className="font-medium">4.8</span>
+                    <span className="font-medium text-sm sm:text-base">4.8</span>
                   </div>
                 </div>
               </div>
 
               <form onSubmit={handleBooking}>
-                <div className="space-y-4 mb-6">
+                <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Check-in
@@ -479,7 +481,7 @@ const ListingDetail = () => {
                       type="date"
                       value={bookingData.from}
                       onChange={(e) => setBookingData({ ...bookingData, from: e.target.value })}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm sm:text-base"
                       required
                     />
                   </div>
@@ -491,19 +493,19 @@ const ListingDetail = () => {
                       type="date"
                       value={bookingData.to}
                       onChange={(e) => setBookingData({ ...bookingData, to: e.target.value })}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent text-sm sm:text-base"
                       required
                     />
                   </div>
                 </div>
 
                 {calculateDays() > 0 && (
-                  <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                    <div className="flex justify-between items-center mb-2">
+                  <div className="bg-gray-50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+                    <div className="flex justify-between items-center mb-2 text-sm sm:text-base">
                       <span>₹{listing.pricePerNight} × {calculateDays()} nights</span>
                       <span>₹{totalPrice}</span>
                     </div>
-                    <div className="flex justify-between items-center font-bold text-lg border-t pt-2">
+                    <div className="flex justify-between items-center font-bold text-base sm:text-lg border-t pt-2">
                       <span>Total</span>
                       <span>₹{totalPrice}</span>
                     </div>
@@ -512,14 +514,14 @@ const ListingDetail = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-rose-500 text-white py-3 rounded-lg hover:bg-rose-600 transition-colors font-medium flex items-center justify-center space-x-2"
+                  className="w-full bg-gradient-to-r from-rose-500 to-pink-600 text-white py-3 sm:py-4 rounded-lg hover:from-rose-600 hover:to-pink-700 transition-all duration-200 font-medium flex items-center justify-center space-x-2 transform hover:scale-105 shadow-lg"
                 >
                   <FaCreditCard className="w-4 h-4" />
-                  <span>Reserve & Pay</span>
+                  <span className="text-sm sm:text-base">Reserve & Pay</span>
                 </button>
               </form>
 
-              <p className="text-sm text-gray-500 text-center mt-4">
+              <p className="text-xs sm:text-sm text-gray-500 text-center mt-3 sm:mt-4">
                 You won't be charged yet
               </p>
             </div>
