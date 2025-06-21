@@ -33,8 +33,11 @@ export async function get(url,params, config = {}) {
 }
 
 export async function post(url, data, config = {}) {
+  // Check if data is FormData, if so, send it directly without wrapping
+  const payload = data instanceof FormData ? data : { ...data };
+  
   return axiosApi
-    .post(url, { ...data }, { ...config })
+    .post(url, payload, { ...config })
     .then(response => response.data)
 }
 
