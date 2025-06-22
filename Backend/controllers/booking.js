@@ -28,7 +28,7 @@ export const createBooking = async (req, res) => {
 // GET /bookings/user - Get bookings for logged-in user
 export const getUserBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find({ user: req.user._id }).populate("listing");
+    const bookings = await Booking.find({ user: req.user._id }).populate("listing").populate("listing.host", "fullName");
     res.status(200).json({ success: true, data: bookings });
   } catch (err) {
     res.status(500).json({ success: false, message: "Failed to fetch bookings", error: err.message });
@@ -56,7 +56,7 @@ export const updateBookingStatus = async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid status. Use 'confirmed' or 'cancelled'" });
     }
 
-    const booking = await Booking.findById(id).populate("listing");
+    const booking = await Booking.findById(id).populate("listing").populate("user", "fullName");
     if (!booking) {
       return res.status(404).json({ success: false, message: "Booking not found" });
     }
@@ -69,7 +69,10 @@ export const updateBookingStatus = async (req, res) => {
     booking.status = status;
     await booking.save();
 
-    res.status(200).json({ success: true, data: booking, message: `Booking ${status} successfully` });
+    // Populate the updated booking with user and listing data
+    const updatedBooking = await Booking.findById(id).populate("listing").populate("user", "fullName");
+
+    res.status(200).json({ success: true, data: updatedBooking, message: `Booking ${status} successfully` });
   } catch (err) {
     console.error("Error updating booking status:", err);
     res.status(500).json({ success: false, message: "Failed to update booking status", error: err.message });

@@ -64,17 +64,17 @@ const MyBookings = () => {
                     {/* Booking Details */}
                     <div className="flex flex-col sm:flex-row sm:items-start mb-4 lg:mb-0 lg:flex-1">
                       <img
-                        src={b.listing.images[0] || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
-                        alt={b.listing.title}
+                        src={b.listing?.images?.[0] || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
+                        alt={b.listing?.title || 'Property'}
                         className="w-full sm:w-20 sm:h-20 lg:w-24 lg:h-24 h-48 object-cover rounded-lg mb-4 sm:mb-0 sm:mr-4"
                       />
                       <div className="flex-1">
                         <h3 className="font-semibold text-lg sm:text-xl text-gray-800 mb-2 line-clamp-2">
-                          {b.listing.title}
+                          {b.listing?.title || 'Property'}
                         </h3>
                         <div className="flex items-center text-gray-600 text-sm sm:text-base mb-2">
                           <FaMapMarkerAlt className="mr-2 flex-shrink-0" />
-                          <span className="line-clamp-1">{b.listing.location}</span>
+                          <span className="line-clamp-1">{b.listing?.location || 'Location not available'}</span>
                         </div>
                         <div className="flex items-center text-gray-500 text-sm sm:text-base">
                           <FaCalendarAlt className="mr-2 flex-shrink-0" />
@@ -85,7 +85,7 @@ const MyBookings = () => {
                         {/* Price */}
                         <div className="mt-2 sm:mt-3">
                           <span className="text-lg sm:text-xl font-bold text-rose-600">
-                            ₹{b.listing.pricePerNight}
+                            ₹{b.listing?.pricePerNight || 0}
                           </span>
                           <span className="text-sm text-gray-500 ml-1">/ night</span>
                         </div>

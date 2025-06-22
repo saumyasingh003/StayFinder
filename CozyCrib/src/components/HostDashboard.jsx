@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaPlus, FaEdit, FaTrash, FaListUl, FaBook, FaCheck, FaTimes, FaUser, FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa';
-import { del, get } from '../helpers/api_helper';
+import { del, get, put } from '../helpers/api_helper';
 
 const HostDashboard = () => {
   const [listings, setListings] = useState([]);
@@ -124,16 +124,16 @@ const HostDashboard = () => {
                       <div className="flex-1 mb-4 sm:mb-0">
                         <div className="flex flex-col sm:flex-row sm:items-center mb-3">
                           <img
-                            src={b.listing.images?.[0] || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
-                            alt={b.listing.title}
+                            src={b.listing?.images?.[0] || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
+                            alt={b.listing?.title || 'Property'}
                             className="w-16 h-16 object-cover rounded-lg mb-3 sm:mb-0 sm:mr-4"
                           />
                           <div className="flex-1">
                             <div className="font-semibold text-lg flex items-center mb-1">
                               <FaUser className="mr-2 text-gray-500 flex-shrink-0" />
-                              <span className="line-clamp-1">{b.user.fullName}</span>
+                              <span className="line-clamp-1">{b.user?.fullName || 'Unknown User'}</span>
                             </div>
-                            <div className="text-gray-600 text-sm mb-1 line-clamp-1">booked {b.listing.title}</div>
+                            <div className="text-gray-600 text-sm mb-1 line-clamp-1">booked {b.listing?.title || 'Property'}</div>
                             <div className="text-sm text-gray-500 flex items-center">
                               <FaCalendarAlt className="mr-2 flex-shrink-0" />
                               <span className="line-clamp-1">
@@ -198,19 +198,19 @@ const HostDashboard = () => {
             listings.map((listing) => (
               <div key={listing._id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 <img
-                  src={listing.images[0] || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
-                  alt={listing.title}
+                  src={listing?.images?.[0] || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
+                  alt={listing?.title || 'Property'}
                   className="w-full h-40 sm:h-48 object-cover"
                 />
                 <div className="p-4">
-                  <h3 className="font-semibold text-lg text-gray-800 mb-2 line-clamp-1">{listing.title}</h3>
+                  <h3 className="font-semibold text-lg text-gray-800 mb-2 line-clamp-1">{listing?.title || 'Property'}</h3>
                   <div className="text-gray-600 mb-2 text-sm line-clamp-1 flex items-center">
                     <FaMapMarkerAlt className="mr-1 flex-shrink-0 text-xs" />
-                    {listing.location}
+                    {listing?.location || 'Location not available'}
                   </div>
-                  <p className="text-gray-500 text-sm mb-4 line-clamp-2">{listing.description}</p>
+                  <p className="text-gray-500 text-sm mb-4 line-clamp-2">{listing?.description || 'No description available'}</p>
                   <div className="text-lg font-bold text-rose-600 mb-4">
-                    ₹{listing.pricePerNight} <span className="text-sm font-normal text-gray-500">/ night</span>
+                    ₹{listing?.pricePerNight || 0} <span className="text-sm font-normal text-gray-500">/ night</span>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2">
                     <button

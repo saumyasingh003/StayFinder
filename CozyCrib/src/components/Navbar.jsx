@@ -83,8 +83,8 @@ const Navbar = () => {
                     to={link.to}
                     className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                       location.pathname === link.to
-                        ? 'bg-white bg-opacity-20 text-white'
-                        : 'hover:bg-white hover:bg-opacity-10 hover:text-gray-200'
+                        ? 'bg-white bg-opacity-20 text-gray-700'
+                        : 'hover:bg-white hover:bg-opacity-10 hover:text-gray-500'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
