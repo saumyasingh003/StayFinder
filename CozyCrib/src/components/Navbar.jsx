@@ -84,7 +84,7 @@ const Navbar = () => {
                     className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                       location.pathname === link.to
                         ? 'bg-white bg-opacity-20 text-gray-700'
-                        : 'hover:bg-white hover:bg-opacity-10 hover:text-gray-500'
+                        : 'hover:bg-white hover:bg-opacity-10 hover:text-gray-700'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -105,7 +105,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   to="/signup"
-                  className="flex items-center space-x-2 px-4 py-2 bg-white text-rose-600 font-semibold rounded-lg hover:bg-rose-50 hover:text-rose-700 transform hover:scale-105 transition-all duration-200 shadow-sm"
+                  className="flex items-center space-x-2 px-4 py-2 bg-white text-gray-700 font-semibold rounded-lg hover:bg-rose-50 hover:text-gray-700 transform hover:scale-105 transition-all duration-200 shadow-sm"
                 >
                   <FaUserPlus className="w-4 h-4" />
                   <span className="hidden lg:inline">Sign Up</span>
@@ -195,7 +195,7 @@ const Navbar = () => {
                     </Link>
                     <Link
                       to="/signup"
-                      className="flex items-center justify-center space-x-2 px-6 py-3 bg-white text-rose-600 font-semibold rounded-lg hover:bg-rose-50 hover:text-rose-700 transition-all duration-200"
+                      className="flex items-center justify-center space-x-2 px-6 py-3 bg-white text-gray-700 font-semibold rounded-lg hover:bg-rose-50 hover:text-gray-700 transition-all duration-200"
                     >
                       <FaUserPlus className="w-4 h-4" />
                       <span>Sign Up</span>
